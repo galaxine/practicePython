@@ -27,7 +27,7 @@ class Player:
         self.__points = points
 
     def __str__(self):
-        return f"Player: {self.__name}, Lives: {self.__points}"
+        return f"Player: {self.__name}, Lives: {self.__points}, Throw: {self.__throw}"
 
 class Rules:
     __player_numbers: int = 0
@@ -52,27 +52,76 @@ class Rules:
             return False
 
     def anybodyDead(self) -> bool:
-        for k, v in self.__players:
-            player = v
-            if player.getLive() == 0:
-                print(player.getName() + "is  O   U     T!\nGame Over")
+        playerlist: list[Player] = list(self.__players.values())
+        for players in playerlist:
+            if players.getLive() == 0:
+                print(players.getName() + "is  O   U     T!\nGame Over")
                 return True
         print("And the game rages on!")
         return False
 
-    def showAllPlayers(self):
-        for k, v in self.__players:
-            player: Player = v
-            print(player.__str__())
+    def printPlayers(self):
+        playerObjects: list[Player] = list(self.__players.values())
+        for players in playerObjects:
+            print(players.__str__())
 
-    def chooseRandomPoison(self) -> enum.Enum:
+    def chooseRandomHandPC(self) -> enum.Enum:
+        print("the pc chooses a hand....")
         poison: int = rand.randint(0,2)
         return self.__hands[poison]
+
+    def chooseHand(self, choice):
+        print("Time to choose the hands")
+        if choice == True:
+            pc: enum.Enum = self.chooseRandomHandPC()
+            player = self.__players.get(1)
+            player.setThrow(self.chooseRandomHandPC())
+            self.__players.__setitem__(1,player)
+            player = None
+            print("The player's turn: ")
+            print("type the assigned number:\n1. Paper\n2. Rocks\n3. Scissor")
+            command: str = input()
+            player = self.__players.get(2)
+            hand = self.__hands[int(command)]
+            print(hand)
+            player.setThrow(hand)
+            self.__players.__setitem__(2, player)
+            player = None
+            self.printPlayers()
+        else:
+            print("The fist player's turn: ")
+            print("type the assigned number:\n1. Paper\n2. Rocks\n3. Scissor")
+            command: str = input()
+            player = self.__players.get(1)
+            hand = self.__hands[int(command)]
+            print(hand)
+            player.setThrow(hand)
+            self.__players.__setitem__(1, player)
+            player = None
+
+            print("The second player's turn: ")
+            print("type the assigned number:\n1. Paper\n2. Rocks\n3. Scissor")
+            command: str = input()
+            player = self.__players.get(2)
+            hand = self.__hands[int(command)]
+            print(hand)
+            player.setThrow(hand)
+            self.__players.__setitem__(2, player)
+            player = None
+            self.printPlayers()
 
     def gameStart(self):
         choice: bool = self.withPcOrFriend()
         print("it's time to play!")
         self.createPlayers(choice)
+        print("We have following players: ")
+        self.printPlayers()
+        while True:
+            self.chooseHand(choice)
+            self.dealWithHands()
+            if self.anybodyDead():
+                "Game is over!"
+                break
 
     def createPlayers(self, pcOrPlayer: bool):
         if pcOrPlayer:
@@ -96,6 +145,7 @@ class Rules:
             player2 = Player()
             player2.setName(name)
             self.__players.__setitem__(2, player2)
+        assert len(self.__players.keys()) == 2, "The player amount is not two"
 
     def dealWithHands(self):
         player1 = self.__players.get(1)
@@ -105,30 +155,34 @@ class Rules:
 
         # Rock and Scissors
         if player1.getThrow() == "Rock" and player2.getThrow() == "Scissors":
-            player1.setLife(player1.getLive() - 1)
+            player2.setLife(player2.getLive() - 1)
+            self.__players.__setitem__(2, player2)
             print(player2S)
         elif player1.getThrow() == "Scissor" and player2.getThrow() == "Rock":
-            player2.setLife(player2.getLive() - 1)
+            player1.setLife(player1.getLive() - 1)
+            self.__players.__setitem__(1, player1)
             print(player1S)
         # Paper and Rock
         elif player1.getThrow() == "Paper" and player2.getThrow() == "Rock":
             player2.setLife(player2.getLive() - 1)
+            self.__players.__setitem__(2, player2)
             print(player2S)
         elif player1.getThrow() == "Rock" and player2.getThrow() == "Paper":
             player1.setLife(player1.getLive() - 1)
+            self.__players.__setitem__(1, player1)
             print(player1S)
         # paper and scissor
         elif player1.getThrow() == "Paper" and player2.getThrow() == "Scissor":
             player1.setLife(player1.getLive() - 1)
-            print(player2S)
+            self.__players.__setitem__(1,player1)
+            print(player1S)
         elif player1.getThrow() == "Scissor" and player2.getThrow() == "Paper":
             player2.setLife(player2.getLive() - 1)
+            self.__players.__setitem__(2, player2)
             print(player2S)
         else:
             print("draw!")
-        if self.anybodyDead():
-            SystemExit(0)
-
+            self.printPlayers()
 
 
 game = Rules()
