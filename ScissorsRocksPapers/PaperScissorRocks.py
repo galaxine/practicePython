@@ -55,7 +55,7 @@ class Rules:
         playerlist: list[Player] = list(self.__players.values())
         for players in playerlist:
             if players.getLive() == 0:
-                print(players.getName() + "is  O   U     T!\nGame Over")
+                print(players.getName() + " is  O   U     T!\nGame Over")
                 return True
         print("And the game rages on!")
         return False
@@ -82,7 +82,7 @@ class Rules:
             print("type the assigned number:\n1. Paper\n2. Rocks\n3. Scissor")
             command: str = input()
             player = self.__players.get(2)
-            hand = self.__hands[int(command)]
+            hand = self.__hands[int(command)-1]
             print(hand)
             player.setThrow(hand)
             self.__players.__setitem__(2, player)
@@ -158,7 +158,7 @@ class Rules:
             player2.setLife(player2.getLive() - 1)
             self.__players.__setitem__(2, player2)
             print(player2S)
-        elif player1.getThrow() == "Scissor" and player2.getThrow() == "Rock":
+        elif player1.getThrow() == "Scissors" and player2.getThrow() == "Rock":
             player1.setLife(player1.getLive() - 1)
             self.__players.__setitem__(1, player1)
             print(player1S)
@@ -172,11 +172,11 @@ class Rules:
             self.__players.__setitem__(1, player1)
             print(player1S)
         # paper and scissor
-        elif player1.getThrow() == "Paper" and player2.getThrow() == "Scissor":
+        elif player1.getThrow() == "Paper" and player2.getThrow() == "Scissors":
             player1.setLife(player1.getLive() - 1)
             self.__players.__setitem__(1,player1)
             print(player1S)
-        elif player1.getThrow() == "Scissor" and player2.getThrow() == "Paper":
+        elif player1.getThrow() == "Scissors" and player2.getThrow() == "Paper":
             player2.setLife(player2.getLive() - 1)
             self.__players.__setitem__(2, player2)
             print(player2S)
