@@ -32,7 +32,7 @@ class Player:
 class Rules:
     __player_numbers: int = 0
     __players: dict[int, Player] = {}
-    __hands: list[enum.Enum] = ['Rock', 'Scissors', 'Paper']
+    __hands: list[enum.Enum] = ['Paper', 'Rock','Scissors']
     __rounds: int = 1
 
     def withPcOrFriend(self) -> bool:
@@ -73,7 +73,6 @@ class Rules:
     def chooseHand(self, choice):
         print("Time to choose the hands")
         if choice == True:
-            pc: enum.Enum = self.chooseRandomHandPC()
             player = self.__players.get(1)
             player.setThrow(self.chooseRandomHandPC())
             self.__players.__setitem__(1,player)
