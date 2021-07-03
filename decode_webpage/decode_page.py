@@ -1,4 +1,4 @@
-# TODO: this doesn't work well enough, check the classes later.
+# TODO: this is as intended: BS is searching for static content, there are articles that don't seem to find dynamic ones. Later I can modify for selenium
 
 import requests
 from bs4 import BeautifulSoup
